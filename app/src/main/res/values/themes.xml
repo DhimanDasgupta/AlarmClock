@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.AlarmClock" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.AlarmClock.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/splash_blue</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_alarm</item>
+        <item name="windowSplashScreenIconBackgroundColor">@color/splash_blue</item>
+        <item name="postSplashScreenTheme">@style/Theme.AlarmClock</item>
+    </style>
+</resources>

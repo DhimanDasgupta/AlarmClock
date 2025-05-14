@@ -1,0 +1,40 @@
+package com.dhimandasgupta.alarmclock
+
+import android.app.Application
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.startKoin
+
+class AlarmClockApp : Application() {
+    var applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
+        private set
+
+    override fun onCreate() {
+        super.onCreate()
+
+        createNotificationChannel()
+        startKoin {
+            androidLogger()
+            androidContext(this@AlarmClockApp)
+            modules()
+        }
+    }
+
+    private fun createNotificationChannel() {
+        val notificationManager = getSystemService(NotificationManager::class.java)
+        val channel = NotificationChannel(
+            "alarm_channel",
+            "Alarm",
+            NotificationManager.IMPORTANCE_HIGH
+        ).apply {
+            setBypassDnd(true)
+            setSound(null, null)
+        }
+        notificationManager.createNotificationChannel(channel)
+    }
+}
