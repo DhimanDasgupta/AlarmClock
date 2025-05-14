@@ -7,6 +7,7 @@
         <item name="windowSplashScreenBackground">@color/splash_blue</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/splash_alarm</item>
         <item name="windowSplashScreenIconBackgroundColor">@color/splash_blue</item>
+        <item name="windowSplashScreenAnimationDuration">300</item>
         <item name="postSplashScreenTheme">@style/Theme.AlarmClock</item>
     </style>
 </resources>
