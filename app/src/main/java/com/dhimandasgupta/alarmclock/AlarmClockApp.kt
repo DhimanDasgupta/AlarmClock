@@ -3,6 +3,7 @@ package com.dhimandasgupta.alarmclock
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.os.StrictMode
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -16,6 +17,9 @@ class AlarmClockApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        if (BuildConfig.DEBUG) {
+            enableStrictMode()
+        }
 
         createNotificationChannel()
         startKoin {
@@ -36,5 +40,23 @@ class AlarmClockApp : Application() {
             setSound(null, null)
         }
         notificationManager.createNotificationChannel(channel)
+    }
+
+    private fun enableStrictMode() {
+        StrictMode.setVmPolicy(
+            StrictMode.VmPolicy.Builder()
+                .detectAll()
+                .penaltyLog()
+                .penaltyDeath()
+                .build()
+        )
+
+        StrictMode.setThreadPolicy(
+            StrictMode.ThreadPolicy.Builder()
+                .detectAll()
+                .penaltyLog()
+                .penaltyDeath()
+                .build()
+        )
     }
 }

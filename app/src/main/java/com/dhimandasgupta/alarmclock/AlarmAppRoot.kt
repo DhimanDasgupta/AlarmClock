@@ -1,15 +1,22 @@
 package com.dhimandasgupta.alarmclock
 
 import androidx.compose.foundation.clickable
+import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.ViewModel
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.dhimandasgupta.alarmclock.ui.screens.AlarmPane
+import com.dhimandasgupta.alarmclock.ui.screens.EmptyAlarmPane
 import kotlinx.serialization.Serializable
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun AlarmAppRoot(
@@ -22,15 +29,13 @@ fun AlarmAppRoot(
         modifier = modifier
     ) {
         AlarmAppNavigationGraph(
-            navController = navController,
-            modifier = modifier
+            navController = navController
         )
     }
 }
 
 private fun NavGraphBuilder.AlarmAppNavigationGraph(
-    navController: NavHostController,
-    modifier: Modifier = Modifier
+    navController: NavHostController
 ) {
     val navigateToDetails = { alarmId: String? ->
         navController.navigate(AlarmAppDestinations.AlarmDetailDestination(alarmId))
@@ -44,22 +49,25 @@ private fun NavGraphBuilder.AlarmAppNavigationGraph(
         startDestination = AlarmAppDestinations.AlarmListDestination
     ) {
         composable<AlarmAppDestinations.AlarmListDestination> {
-            Text(
-                text = "This is Alarm List screen",
-                modifier = Modifier.clickable { navigateToDetails("alarmId") }
+            AlarmPane(
+                modifier = Modifier,
+                navigateToAlarmId = { id ->
+                    navigateToDetails(id)
+                }
             )
         }
 
         composable<AlarmAppDestinations.AlarmDetailDestination> {
-            Text(
-                text = "This is Alarm Detail screen",
-                modifier = Modifier.clickable { navigateToRingtonePicker("name", "uri") }
+            EmptyAlarmPane(
+                modifier = Modifier,
+                navigateToRingtonePicker = { name, uri -> navigateToRingtonePicker(name, uri) }
             )
         }
 
         composable<AlarmAppDestinations.RingtonePickerDestination> {
             Text(
                 text = "This is Ringtone Picker screen",
+                style = typography.labelSmall,
                 modifier = Modifier.clickable {
                     repeat(2) {
                         navController.navigateUp()
@@ -95,4 +103,15 @@ object AlarmAppDestinations {
             }
         }
     }
+}
+
+@Composable
+inline fun <reified T: ViewModel> NavBackStackEntry.sharedKoinViewModel(
+    navController: NavHostController
+): T {
+    val navGraphRoute = destination.parent?.route ?: koinViewModel<T>()
+    val parentEntry = remember(this) {
+        navController.getBackStackEntry(navGraphRoute)
+    }
+    return koinViewModel<T>(viewModelStoreOwner = parentEntry)
 }

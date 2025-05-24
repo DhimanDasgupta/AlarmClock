@@ -18,6 +18,15 @@ android {
         versionName = libs.versions.versionName.get()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildTypes {
+            getByName("debug") {
+                buildConfigField("boolean", "DEBUGGABLE", "true")
+            }
+            getByName("release") {
+                buildConfigField("boolean", "DEBUGGABLE", "false")
+            }
+        }
     }
 
     buildTypes {
@@ -38,6 +47,10 @@ android {
     }
     buildFeatures {
         compose = true
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 }
 
