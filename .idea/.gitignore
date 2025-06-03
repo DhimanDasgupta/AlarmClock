@@ -1,6 +1,4 @@
-*.iml
 gitignore
-*.iml
 # Gradle files
 .gradle/
 build/
@@ -24,7 +22,6 @@ local.properties
 /captures
 .externalNativeBuild
 .cxx
-local.properties
 
 # kapt / ksp generated files
 # (If you are using KSP, you might need to adjust this path based on your project setup)
