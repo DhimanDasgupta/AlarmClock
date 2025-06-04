@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "com.dhimandasgupta.alarmclock"
-    compileSdk = 35
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
         applicationId = "com.dhimandasgupta.alarmclock"
@@ -43,7 +43,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = JavaVersion.VERSION_11.toString()
     }
     buildFeatures {
         compose = true
@@ -78,6 +78,7 @@ dependencies {
     testImplementation(libs.androidx.room.testing)
 
     // Koin
+    implementation(libs.bundles.koin)
     implementation(libs.bundles.koin.compose)
 
     // Kotlinx Serialization JSON
